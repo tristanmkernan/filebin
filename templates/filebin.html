@@ -81,17 +81,22 @@
         function update_time_remaining() {
             // remaining in s
             var remaining = Math.floor((expiration - Date.now()) / 1000);
+            var text = '';
 
-            var seconds = remaining % 60;
-            var minutes = Math.floor(remaining / 60);
+            if (remaining > 0) {
+                var seconds = remaining % 60;
+                var minutes = Math.floor(remaining / 60);
 
-            var text = '' + minutes + ':';
+                text = '' + minutes + ':';
 
-            if (seconds < 10) {
-                text += '0';
+                if (seconds < 10) {
+                    text += '0';
+                }
+
+                text += seconds;
+            } else {
+                text = 'Files deleted!';
             }
-
-            text += seconds;
 
             $('#countdown').text(text);
         }
