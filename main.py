@@ -5,20 +5,18 @@ import os
 import shutil
 import pathlib
 import time
-
 import utils
 
-UPLOAD_FOLDER = '/tmp/filebin/'
+UPLOAD_FOLDER = '/tmp/filebin/usercontent'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app = Flask(__name__)
 app.secret_key = 'i should probably change this'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_FILES_PER_UPLOAD'] = 5
+app.config['MAX_FILES_PER_UPLOAD'] = 10
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-
 dictionary_db = utils.DictionaryDatabase()
-
 
 File = namedtuple('File', ['filename', 'size'])
 Remaining = namedtuple('Remaining', ['minutes', 'seconds'])
@@ -47,7 +45,8 @@ def _extract_definitions(code):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', max_files=app.config['MAX_FILES_PER_UPLOAD'],
+                           max_size=utils.sizeof_fmt(app.config['MAX_CONTENT_LENGTH']))
 
 
 @app.route('/new', methods=['POST'])
@@ -118,7 +117,7 @@ def filebin(code):
 
 @app.route('/bin/<code>/<filename>')
 def uploaded_file(code, filename):
-    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], code), filename)
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], code), filename, as_attachment=True)
 
 
 @app.errorhandler(404)
@@ -133,4 +132,4 @@ def upload_too_large(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)

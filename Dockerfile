@@ -1,10 +1,3 @@
-FROM python:3.6
-LABEL maintainer "Tristan Kernan <tristan.kernan@rutgers.edu>"
+FROM tiangolo/uwsgi-nginx-flask:python3.6
 
-RUN apt-get update
-RUN mkdir /app
-WORKDIR /app
 COPY . /app
-RUN pip install --no-cache-dir -r requirements.txt
-
-CMD python app.py

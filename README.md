@@ -6,7 +6,12 @@
 
 ## Setup
 
-TODO docker setup instructions
+```
+docker build -t your_tag .
+docker run -it -p $some_local_port:80 your_tag
+```
+
+Then point your browser at http://localhost:$some_local_port.
 
 ## Motivation
 
@@ -28,6 +33,7 @@ TODO docker setup instructions
 #### Extras
 
 - [https://github.com/adambom/dictionary](English Language Dictionary JSON) _MIT_
+- [https://github.com/tiangolo/uwsgi-nginx-flask-docker](uwsgi-nginx-flask) _Apache 2.0_
 
 ## License
 
