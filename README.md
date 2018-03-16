@@ -31,10 +31,11 @@ Then point your browser at http://localhost:$some_local_port.
 
 - [Flask](http://flask.pocoo.org/) _three clause BSD License_
 
-#### Extras
+#### Others
 
 - [English Language Dictionary JSON](https://github.com/adambom/dictionary]) _MIT_
 - [uwsgi-nginx-flask](https://github.com/tiangolo/uwsgi-nginx-flask-docker]) _Apache 2.0_
+- [GIMP](https://www.gimp.org/)
 
 ## License
 
