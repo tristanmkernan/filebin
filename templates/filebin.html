@@ -13,7 +13,7 @@
                     <p>
                         {{ meta.num_files }} file(s) &bull;
                         {{ meta.total_size }} &bull;
-                        <span id="countdown">{{ meta.remaining.minutes }}:{{ meta.remaining.seconds }}</span> left
+                        <span id="countdown">{{ meta.remaining.minutes }}:{{ meta.remaining.seconds }} left</span>
                     </p>
                 </div>
                 {% for file in files %}
@@ -93,7 +93,7 @@
                     text += '0';
                 }
 
-                text += seconds;
+                text += seconds + ' left';
             } else {
                 text = 'Files deleted!';
             }
