@@ -61,6 +61,18 @@ def new():
         flash('Too many files!')
         return redirect(url_for('index'))
 
+    # remove old files
+    upload_path = pathlib.Path(app.config['UPLOAD_FOLDER'])
+
+    for child in upload_path.iterdir():
+        if child.is_dir():
+            stat = child.stat()
+            expiration = stat.st_mtime + (60 * 10)
+            remaining_seconds = expiration - time.time()
+
+            if remaining_seconds < 0:
+                shutil.rmtree(child)
+
     code = _generate_code()
 
     for file in uploaded_files:
