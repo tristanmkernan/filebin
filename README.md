@@ -2,7 +2,8 @@
 
 *Like PasteBin, but for files*
 
-![main](screenshots/base.png?raw=true)
+![main](screenshots/main.png?raw=true)
+![main](screenshots/bin.png?raw=true)
 
 ## Setup
 
@@ -23,17 +24,17 @@ Then point your browser at http://localhost:$some_local_port.
 #### Frontend
 
 - [Bulma](https://bulma.io/) _MIT_
-- [https://fontawesome.com/v4.7.0/](Font Awesome) _CC BY 4.0_ and _SIL OLF_
-- [https://jquery.com/](jQuery) _MIT_
+- [Font Awesome](https://fontawesome.com/v4.7.0/) _CC BY 4.0_ and _SIL OLF_
+- [jQuery](https://jquery.com/) _MIT_
 
 #### Backend
 
-- [http://flask.pocoo.org/](Flask) _three clause BSD License_
+- [Flask](http://flask.pocoo.org/) _three clause BSD License_
 
 #### Extras
 
-- [https://github.com/adambom/dictionary](English Language Dictionary JSON) _MIT_
-- [https://github.com/tiangolo/uwsgi-nginx-flask-docker](uwsgi-nginx-flask) _Apache 2.0_
+- [English Language Dictionary JSON](https://github.com/adambom/dictionary]) _MIT_
+- [uwsgi-nginx-flask](https://github.com/tiangolo/uwsgi-nginx-flask-docker]) _Apache 2.0_
 
 ## License
 

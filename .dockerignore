@@ -7,6 +7,7 @@ example.db
 
 bin/
 lib/
+screenshots/
 
 __pycache__
 */__pycache__
