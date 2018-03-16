@@ -129,6 +129,24 @@ def filebin(code):
 
 @app.route('/bin/<code>/<filename>')
 def uploaded_file(code, filename):
+    code = code.lower()
+    path = os.path.join(app.config['UPLOAD_FOLDER'], code)
+
+    if not os.path.exists(path):
+        flash('Bin not found!')
+        return abort(404)
+
+    p = pathlib.Path(path)
+
+    stat = p.stat()
+    expiration = stat.st_mtime + (60 * 10)
+    remaining_seconds = expiration - time.time()
+
+    if remaining_seconds < 0:
+        shutil.rmtree(path)
+        flash('Bin not found!')
+        return abort(404)
+
     return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], code), filename, as_attachment=True)
 
 
