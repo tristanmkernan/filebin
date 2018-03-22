@@ -109,7 +109,7 @@
             <div class="field">
                 <label class="label">Enter Code</label>
                 <div class="control">
-                    <input class="input" type="text" name="code" placeholder="voracious_gorilla" required autofocus>
+                    <input class="input" type="text" name="code" placeholder="voracious_gorilla" required data-focus="me">
                 </div>
             </div>
             <p class="help">
@@ -132,6 +132,7 @@
         $('#open-enter-code-modal')
             .click(function () {
                 $('.modal').addClass('is-active');
+                $('.modal input[data-focus]').focus();
             });
 
         $('.modal button.delete')
