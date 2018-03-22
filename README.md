@@ -9,8 +9,10 @@
 ## Setup
 
 ```
-docker build -t your_tag .
-docker run -it -p $some_local_port:80 your_tag
+make # short for make build
+make irun # run in interactive mode
+make drun # run as daemon
+make stop # stop daemon
 ```
 
 Then point your browser at http://localhost:$some_local_port.
