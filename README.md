@@ -3,6 +3,7 @@
 *Like PasteBin, but for files*
 
 ![main](screenshots/main.png?raw=true)
+---
 ![main](screenshots/bin.png?raw=true)
 
 ## Setup
@@ -33,7 +34,8 @@ Then point your browser at http://localhost:$some_local_port.
 
 #### Others
 
-- [English Language Dictionary JSON](https://github.com/adambom/dictionary]) _MIT_
+- [NLTK](https://www.nltk.org/) _apache 2.0_
+- [WordNet](https://wordnet.princeton.edu/) _[here](https://wordnet.princeton.edu/license-and-commercial-use)_
 - [uwsgi-nginx-flask](https://github.com/tiangolo/uwsgi-nginx-flask-docker]) _Apache 2.0_
 - [GIMP](https://www.gimp.org/)
 

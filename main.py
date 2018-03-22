@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, abort, send_from_directory
+from flask import Flask, render_template, redirect, url_for, request, flash, \
+    abort, send_from_directory
 from werkzeug.utils import secure_filename
 from collections import namedtuple
 import os
@@ -20,7 +21,8 @@ dictionary_db = utils.DictionaryDatabase()
 
 File = namedtuple('File', ['filename', 'size'])
 Remaining = namedtuple('Remaining', ['minutes', 'seconds'])
-BinMetadata = namedtuple('BinMetadata', ['num_files', 'total_size', 'remaining'])
+BinMetadata = namedtuple(
+    'BinMetadata', ['num_files', 'total_size', 'remaining'])
 Definition = namedtuple('Definition', ['word', 'meaning'])
 
 
@@ -120,7 +122,8 @@ def filebin(code):
 
             files.append(File(filename, size))
 
-    remaining = Remaining(int(remaining_seconds / 60), int(remaining_seconds % 60))
+    remaining = Remaining(int(remaining_seconds / 60),
+                          int(remaining_seconds % 60))
     meta = BinMetadata(len(files), utils.sizeof_fmt(total_size), remaining)
     definitions = _extract_definitions(code)
 
