@@ -9,10 +9,10 @@
 ## Setup
 
 ```
-make # short for make build
-make irun # run in interactive mode
-make drun # run as daemon
-make stop # stop daemon
+$ make # short for make build
+$ make irun # run in interactive mode
+$ make drun # run as daemon
+$ make stop # stop daemon
 ```
 
 Then point your browser at http://localhost:$some_local_port.
