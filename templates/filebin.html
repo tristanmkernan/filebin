@@ -3,104 +3,116 @@
 {% block title %}FileBin{% endblock %}
 
 {% block main %}
-    <div class="columns">
-        <div class="column">
-            <nav class="panel">
-                <p class="panel-heading">
-                    Bin <strong>{{ code }}</strong>
+<div class="columns">
+    <div class="column">
+        <article class="message is-danger is-hidden" id="files-deleted-message">
+            <div class="message-header">
+                <p>Files Deleted</p>
+            </div>
+            <div class="message-body">
+		This bin has been <strong>removed</strong>. Bins expire after <strong>10 minutes</strong>.
+            </div>
+        </article>
+        <nav class="panel">
+            <p class="panel-heading">
+                Bin <strong>{{ code }}</strong>
+            </p>
+            <div class="panel-block">
+                <p>
+                    {{ meta.num_files }} file(s) &bull;
+                    {{ meta.total_size }} &bull;
+                    <span id="countdown">{{ meta.remaining.minutes }}:{{ meta.remaining.seconds | formatseconds }} left</span>
                 </p>
-                <div class="panel-block">
-                    <p>
-                        {{ meta.num_files }} file(s) &bull;
-                        {{ meta.total_size }} &bull;
-                        <span id="countdown">{{ meta.remaining.minutes }}:{{ meta.remaining.seconds }} left</span>
-                    </p>
-                </div>
-                {% for file in files %}
-                    <a class="panel-block" href="{{ url_for('uploaded_file', code=code, filename=file.filename) }}">
-                        <span class="panel-icon">
-                          <i class="fa fa-download"></i>
-                        </span>
-                        <span class="" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                            {{ file.filename }}
-                        </span>
-                        <span class="is-size-7" style="margin-left: auto;">
-                            {{ file.size }}
-                        </span>
-                    </a>
-                {% endfor %}
-            </nav>
-        </div>
-        <div class="column">
-            <article class="message is-info">
-                <div class="message-header">
-                    <p>Instructions</p>
-                </div>
-                <div class="message-body">
-                    Visit this site in another browser and enter the code <strong>{{ code }}</strong>. Alternatively,
-                    copy <a href="{{ url_for('filebin', code=code) }}">this link</a> by right clicking and selecting
-                    "copy link location." Then, share the link however you'd like!
-                </div>
-            </article>
-            <article class="message is-info">
-                <div class="message-header">
-                    <p>Definitions</p>
-                </div>
-                <div class="message-body">
-                    If you haven't already noticed, the codes used on this site are constructed from two random English
-                    words. While you're here, check out the definitions!
-                </div>
-            </article>
-            {% for definition in definitions %}
-                <article class="message">
-                    <div class="message-header">
-                        <p>
-                            {{ definition.word|title }}
-                        </p>
-                        <a class="button is-small" href="https://en.wiktionary.org/wiki/{{ definition.word }}"
-                           title="Wiktionary">
-                            <span class="icon is-small">
-                                <i class="fa fa-wikipedia-w"></i>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="message-body">
-                        {{ definition.meaning }}
-                    </div>
-                </article>
+            </div>
+            {% for file in files %}
+            <a class="panel-block" href="{{ url_for('uploaded_file', code=code, filename=file.filename) }}">
+                <span class="panel-icon">
+                    <i class="fa fa-download"></i>
+                </span>
+                <span class="" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                    {{ file.filename }}
+                </span>
+                <span class="is-size-7" style="margin-left: auto;">
+                    {{ file.size }}
+                </span>
+            </a>
             {% endfor %}
-        </div>
+        </nav>
     </div>
+    <div class="column">
+        <article class="message is-info">
+            <div class="message-header">
+                <p>Instructions</p>
+            </div>
+            <div class="message-body">
+                Visit this site in another browser and enter the code <strong>{{ code }}</strong>. Alternatively,
+                copy <a href="{{ url_for('filebin', code=code) }}">this link</a> by right clicking and selecting
+                "copy link location." Then, share the link however you'd like!
+            </div>
+        </article>
+        <article class="message is-info">
+            <div class="message-header">
+                <p>Definitions</p>
+            </div>
+            <div class="message-body">
+                If you haven't already noticed, the codes used on this site are constructed from two random English
+                words. While you're here, check out the definitions!
+            </div>
+        </article>
+        {% for definition in definitions %}
+        <article class="message">
+            <div class="message-header">
+                <p>
+                    {{ definition.word|title }}
+                </p>
+                <a class="button is-small" href="https://en.wiktionary.org/wiki/{{ definition.word }}"
+                   title="Wiktionary">
+                    <span class="icon is-small">
+                        <i class="fa fa-wikipedia-w"></i>
+                    </span>
+                </a>
+            </div>
+            <div class="message-body">
+                {{ definition.meaning }}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
 
 {% block extrascripts %}
-    <script>
-        // expiration in ms
-        var expiration = Date.now() + Math.floor((({{ meta.remaining.minutes }} * 60) + {{ meta.remaining.seconds }}) * 1000);
+<script>
+ // expiration in ms
+ var expiration = Date.now() + Math.floor((({{ meta.remaining.minutes }} * 60) + {{ meta.remaining.seconds }}) * 1000);
 
-        function update_time_remaining() {
-            // remaining in s
-            var remaining = Math.floor((expiration - Date.now()) / 1000);
-            var text = '';
+ var intervalID = setInterval(update_time_remaining, 500);
 
-            if (remaining > 0) {
-                var seconds = remaining % 60;
-                var minutes = Math.floor(remaining / 60);
+ function update_time_remaining() {
+     // remaining in s
+     var remaining = Math.floor((expiration - Date.now()) / 1000);
+     var text = '';
 
-                text = '' + minutes + ':';
+     if (remaining > 0) {
+         var seconds = remaining % 60;
+         var minutes = Math.floor(remaining / 60);
 
-                if (seconds < 10) {
-                    text += '0';
-                }
+         text = '' + minutes + ':';
 
-                text += seconds + ' left';
-            } else {
-                text = 'Files deleted!';
-            }
+         if (seconds < 10) {
+             text += '0';
+         }
 
-            $('#countdown').text(text);
-        }
+         text += seconds + ' left';
+     } else {
+         text = 'Files deleted!';
 
-        setInterval(update_time_remaining, 500);
-    </script>
+	 $('#files-deleted-message').removeClass('is-hidden');
+
+	 clearInterval(intervalID);
+     }
+
+     $('#countdown').text(text);
+ }
+</script>
 {% endblock %}

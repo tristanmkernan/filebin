@@ -3,41 +3,41 @@
 {% block title %}FileBin{% endblock %}
 
 {% block main %}
-    <form class="container has-text-centered" method="post" enctype="multipart/form-data" action="{{ url_for('new') }}">
-        <h1 class="title">
-            Upload files. Get ten-minute link. Download. Done.
-        </h1>
-        <div class="file is-boxed is-centered">
-            <label class="file-label">
-                <input class="file-input" type="file" multiple name="files" required>
-                <span class="file-cta">
-                <span class="file-icon">
-                    <i class="fa fa-upload"></i>
-                </span>
-                <span class="file-label">
-                    Choose file(s)...
-                </span>
-            </span>
-            </label>
-        </div>
-        <h2 class="subtitle">
-            Limit {{ max_files }} files. Max {{ max_size }} total.
-        </h2>
-        <input class="button is-link" type="submit" value="Upload">
-    </form>
+<form class="container has-text-centered" method="post" enctype="multipart/form-data" action="{{ url_for('new') }}">
+  <h1 class="title">
+    Upload files. Get ten-minute link. Download. Done.
+  </h1>
+  <div class="file is-boxed is-centered">
+    <label class="file-label">
+      <input class="file-input" type="file" multiple name="files" required>
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fa fa-upload"></i>
+        </span>
+        <span class="file-label">
+          Choose file(s)...
+        </span>
+      </span>
+    </label>
+  </div>
+  <h2 class="subtitle">
+    Limit {{ max_files }} files. Max {{ max_size }} total.
+  </h2>
+  <input class="button is-link" type="submit" value="Upload">
+</form>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <article class="message is-danger">
-                    <div class="message-header">
-                        <p>Error</p>
-                    </div>
-                    <div class="message-body">
-                        {{ message }}
-                    </div>
-                </article>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<article class="message is-danger my-upload-error">
+  <div class="message-header">
+    <p>Error</p>
+  </div>
+  <div class="message-body">
+    {{ message }}
+  </div>
+</article>
+{% endfor %}
+{% endif %}
+{% endwith %}
 {% endblock %}

@@ -1,158 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
-          integrity="sha256-2k1KVsNPRXxZOsXQ8aqcZ9GOOwmJTMoOB5o5Qp1d6/s=" crossorigin="anonymous"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+              integrity="sha256-2k1KVsNPRXxZOsXQ8aqcZ9GOOwmJTMoOB5o5Qp1d6/s=" crossorigin="anonymous"/>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/fa/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/fa/css/font-awesome.min.css') }}">
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-    <style>
-        .subtitle {
-            margin-top: 1rem;
-        }
+	<style>
+         .subtitle {
+             margin-top: 1rem;
+         }
 
-        article.message.is-danger {
-            max-width: 20rem;
-            margin: 1rem auto;
-        }
-    </style>
-</head>
-<body>
-<section class="hero x-is-primary is-medium">
-    <div class="hero-head">
-        <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="container">
-                <div class="navbar-brand">
-                    <a class="navbar-item" href="/">
-                        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="logo" title="Made with GIMP"
-                            width="72" height="28">
-                    </a>
+         article.my-upload-error {
+             max-width: 20rem;
+             margin: 1rem auto;
+         }
+	</style>
+    </head>
+    <body>
+	<section class="hero is-medium">
+	    <div class="hero-head">
+		<nav class="navbar" role="navigation" aria-label="main navigation">
+		    <div class="container">
+			<div class="navbar-brand">
+			    <a class="navbar-item" href="/">
+				<img src="{{ url_for('static', filename='image/logo.png') }}" alt="logo" title="Made with GIMP"
+				     width="72" height="28">
+			    </a>
 
-                    <div class="navbar-burger">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-                <div class="navbar-menu">
-                    <div class="navbar-end">
-                        <a class="navbar-item" href="/">
-                            <span class="icon">
-                              <i class="fa fa-home"></i>
-                            </span>
-                            <span>Home</span>
-                        </a>
-                        <a class="navbar-item" href="https://github.com/russon77/filebin">
-                            <span class="icon">
-                              <i class="fa fa-github"></i>
-                            </span>
-                            <span>Github</span>
-                        </a>
-                        <a class="navbar-item is-primary" id="open-enter-code-modal">
-                            <span class="icon">
-                                <i class="fa fa-download"></i>
-                            </span>
-                            <span>Enter Code</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
+			    <a class="navbar-item open-enter-code-modal">
+				<span class="icon">
+				    <i class="fa fa-search"></i>
+				</span>
+				<span>Enter Code</span>
+			    </a>
 
-    <div class="hero-body">
-        {% block main %}{% endblock %}
-    </div>
-</section>
+			    <div class="navbar-burger">
+				<span></span>
+				<span></span>
+				<span></span>
+			    </div>
+			</div>
+			<div class="navbar-menu">
+			    <div class="navbar-end">
+				<a class="navbar-item" href="/">
+				    <span class="icon">
+					<i class="fa fa-home"></i>
+				    </span>
+				    <span>Home</span>
+				</a>
+				<a class="navbar-item" href="https://github.com/russon77/filebin">
+				    <span class="icon">
+					<i class="fa fa-github"></i>
+				    </span>
+				    <span>Github</span>
+				</a>
+			    </div>
+			</div>
+		    </div>
+		</nav>
+	    </div>
 
-<footer class="footer">
-    <div class="container">
-        <div class="content has-text-centered">
-            <p>
-                <strong>FileBin</strong> by <a href="https://mahasamatman.me">Tristan Kernan</a>. The source code is
-                licensed
-                <a href="https://www.gnu.org/licenses/gpl.html">GPL</a>. The website content
-                is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
-            </p>
-            <p>
-                Made with
-                <strong><a href="https://bulma.io/">Bulma</a></strong>
-                &bull;
-                <strong><a href="https://fontawesome.com/v4.7.0/">Font Awesome</a></strong>
-                &bull;
-                <strong><a href="https://jquery.com/">jQuery</a></strong>
-                &bull;
-                <strong><a href="http://flask.pocoo.org/">Flask</a></strong>
-                &bull;
-                <strong><a href="https://www.gimp.org/">GIMP</a></strong>
-            </p>
-            <p>
-                <strong><a href="https://www.nltk.org/">NLTK</a></strong>
-                &bull;
-                <strong><a href="https://wordnet.princeton.edu/">WordNet</a></strong>
-            </p>	    
-            <p class="is-italic">
-                Please note: all uploaded files are public. Do not upload sensitive information!
-            </p>
-        </div>
-    </div>
-</footer>
+	    <div class="hero-body">
+		{% block main %}{% endblock %}
+	    </div>
+	</section>
 
-<div class="modal">
-    <div class="modal-background"></div>
-    <form class="modal-card" action="{{ url_for('find') }}">
-        <header class="modal-card-head">
-            <p class="modal-card-title">Find Bin</p>
-            <button class="delete" aria-label="close" type="button"></button>
-        </header>
-        <section class="modal-card-body">
-            <div class="field">
-                <label class="label">Enter Code</label>
-                <div class="control">
-                    <input class="input" type="text" name="code" placeholder="voracious_gorilla" required data-focus="me">
-                </div>
-            </div>
-            <p class="help">
-                The code is the combination of the two randomly selected words, in order and with an underscore in between. For example <strong>gloomth_purposive</strong>.
-            </p>
-        </section>
-        <footer class="modal-card-foot">
-            <button class="button is-success" type="submit">
-                Find Bin
-            </button>
-        </footer>
-    </form>
-</div>
+	<footer class="footer">
+	    <div class="container">
+		<div class="content has-text-centered">
+		    <p>
+			<strong>FileBin</strong> by <a href="https://mahasamatman.me">Tristan Kernan</a>. The source code is
+			licensed
+			<a href="https://www.gnu.org/licenses/gpl.html">GPL</a>. The website content
+			is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+		    </p>
+		    <p>
+			Made with
+			<strong><a href="https://bulma.io/">Bulma</a></strong>
+			&bull;
+			<strong><a href="https://fontawesome.com/v4.7.0/">Font Awesome</a></strong>
+			&bull;
+			<strong><a href="https://jquery.com/">jQuery</a></strong>
+			&bull;
+			<strong><a href="http://flask.pocoo.org/">Flask</a></strong>
+			&bull;
+			<strong><a href="https://www.gimp.org/">GIMP</a></strong>
+		    </p>
+		    <p>
+			<strong><a href="https://www.nltk.org/">NLTK</a></strong>
+			&bull;
+			<strong><a href="https://wordnet.princeton.edu/">WordNet</a></strong>
+		    </p>	    
+		    <p class="is-italic">
+			Please note: all uploaded files are public. Do not upload sensitive information!
+		    </p>
+		</div>
+	    </div>
+	</footer>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-	integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="	crossorigin="anonymous"></script>
+	<div class="modal">
+	    <div class="modal-background"></div>
+	    <form class="modal-card" action="{{ url_for('find') }}">
+		<header class="modal-card-head">
+		    <p class="modal-card-title">Find Bin</p>
+		    <button class="delete" aria-label="close" type="button"></button>
+		</header>
+		<section class="modal-card-body">
+		    <div class="field">
+			<label class="label">Enter Code</label>
+			<div class="control">
+			    <input class="input" type="text" name="code" placeholder="voracious_gorilla" required data-focus="me">
+			</div>
+		    </div>
+		    <p class="help">
+			The code is the combination of the two randomly selected words, in order and with an underscore in between. For example <strong>gloomth_purposive</strong>.
+		    </p>
+		</section>
+		<footer class="modal-card-foot">
+		    <button class="button is-success" type="submit">
+			Find Bin
+		    </button>
+		</footer>
+	    </form>
+	</div>
 
-<script>
-    $(document).ready(function () {
-        $('#open-enter-code-modal')
-            .click(function () {
-                $('.modal').addClass('is-active');
-                $('.modal input[data-focus]').focus();
-            });
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="	crossorigin="anonymous"></script>
 
-        $('.modal button.delete')
-            .click(function () {
-                $('.modal').removeClass('is-active');
-            });
+	<script>
+	 $(document).ready(function () {
+             $('.open-enter-code-modal')
+		 .click(function () {
+                     $('.modal').addClass('is-active');
+                     $('.modal input[data-focus]').focus();
+		 });
 
-        $('.navbar-burger')
-            .click(function () {
-                $(this).toggleClass('is-active');
-                $('.navbar-menu').toggleClass('is-active');
-            });
-    });
-</script>
+             $('.modal button.delete')
+		 .click(function () {
+                     $('.modal').removeClass('is-active');
+		 });
 
-{% block extrascripts %}{% endblock %}
-</body>
+             $('.navbar-burger')
+		 .click(function () {
+                     $(this).toggleClass('is-active');
+                     $('.navbar-menu').toggleClass('is-active');
+		 });
+
+	     $(document).on({
+		 keydown: function (e) {
+		     if (e.which === 27) {
+			 $('.modal').removeClass('is-active');
+			 e.preventDefault();
+		     }
+		 }
+	     });
+	 });
+	</script>
+
+	{% block extrascripts %}{% endblock %}
+    </body>
 </html>

@@ -45,6 +45,14 @@ def _extract_definitions(code):
     return Definition(word1, dictionary_db.define(word1)), Definition(word2, dictionary_db.define(word2))
 
 
+@app.template_filter('formatseconds')
+def timestamp_filter(seconds):
+    if seconds < 10:
+        return '0{}'.format(seconds)
+
+    return seconds
+
+
 @app.route('/')
 def index():
     return render_template('index.html', max_files=app.config['MAX_FILES_PER_UPLOAD'],
