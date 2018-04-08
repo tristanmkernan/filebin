@@ -2,14 +2,15 @@
 <html lang="en">
     <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<title>{% block title %}{% endblock %}</title>
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
-              integrity="sha256-2k1KVsNPRXxZOsXQ8aqcZ9GOOwmJTMoOB5o5Qp1d6/s=" crossorigin="anonymous"/>
-
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/fa/css/font-awesome.min.css') }}">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<link rel="manifest" href="/manifest.webmanifest">
 
 	<style>
          .subtitle {
@@ -96,7 +97,10 @@
 			<strong><a href="https://www.nltk.org/">NLTK</a></strong>
 			&bull;
 			<strong><a href="https://wordnet.princeton.edu/">WordNet</a></strong>
-		    </p>	    
+		    </p>
+		    <p class="is-size-7">
+			Pigeon icon made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+		    </p>
 		    <p class="is-italic">
 			Please note: all uploaded files are public. Do not upload sensitive information!
 		    </p>
@@ -130,8 +134,7 @@
 	    </form>
 	</div>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="	crossorigin="anonymous"></script>
+	<script src="{{ url_for('static', filename='js/jquery-3.3.1.slim.min.js') }}"></script>
 
 	<script>
 	 $(document).ready(function () {
