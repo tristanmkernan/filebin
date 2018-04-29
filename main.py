@@ -118,7 +118,7 @@ def filebin(code):
 
     if not os.path.exists(path):
         flash('Bin not found!')
-        return abort(404)
+        return redirect(url_for('index'))
 
     p = pathlib.Path(path)
 
