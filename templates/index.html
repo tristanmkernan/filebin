@@ -45,7 +45,8 @@
 		<p class="is-size-6 is-italic" style="margin: 0.5rem 0;">
 		    Limit {{ max_files }} files. Max {{ max_size }} total.
 		</p>
-		<input class="button is-link" type="submit" value="Upload">
+		<input id="upload-submit-button" class="button is-link" type="submit" value="Upload" disabled>
+		<p id="files-selected-text" class="is-size-6" style="margin: 0.5rem 0;"></p>
 	    </form>
 	</div>
 	<div class="column">
@@ -83,4 +84,21 @@
 	</div>
     </div>
 </div>
+{% endblock %}
+
+{% block extrascripts %}
+<script>
+ $(document).ready(function() {
+     $('input[type=file]').change(function(e) {
+	 var count = this.files.length;
+	 if (count === 0) {
+	     $('#upload-submit-button').addAttr('disabled');
+	     $('#files-selected-text').text();
+	 } else {
+	     $('#upload-submit-button').removeAttr('disabled');
+	     $('#files-selected-text').text('' + count + ' file(s) selected');
+	 }
+     });
+ });
+</script>
 {% endblock %}
