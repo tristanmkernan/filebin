@@ -29,6 +29,16 @@
              max-width: 20rem;
              margin: 1rem auto;
          }
+
+	 body {
+	     display: flex;
+	     flex-direction: column;
+	     min-height: 100vh;
+	 }
+
+	 .flexify-me {
+	     flex: 1;
+	 }
 	</style>
     </head>
     <body>
@@ -73,7 +83,7 @@
 
 	{% block main %}{% endblock %}
 
-	<footer class="footer" style="margin-top: 4rem;">
+	<footer class="footer">
 	    <div class="container">
 		<div class="content has-text-centered">
 		    <p class="is-italic">

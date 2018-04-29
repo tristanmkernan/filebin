@@ -3,24 +3,26 @@
 {% block title %}Page Not Found{% endblock %}
 
 {% block main %}
-<section class="hero">
-    <div class="hero-body">
-	<div class="container">
-	    <h1 class="title">
-		404 Page Not Found
-	    </h1>
-	    <h2 class="subtitle">
-		{% with messages = get_flashed_messages() %}
-		{% if messages %}
-		{% for message in messages %}
-                {{ message }}
-                {% endfor %}
-		{% else %}
-                What you were looking for is just not there.
-		{% endif %}
-		{% endwith %}
-	    </h2>
+<div class="container flexify-me">
+    <section class="hero">
+	<div class="hero-body">
+	    <div class="container">
+		<h1 class="title">
+		    404 Page Not Found
+		</h1>
+		<h2 class="subtitle">
+		    {% with messages = get_flashed_messages() %}
+		    {% if messages %}
+		    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+		    {% else %}
+                    What you were looking for is just not there.
+		    {% endif %}
+		    {% endwith %}
+		</h2>
+	    </div>
 	</div>
-    </div>
-</section>
+    </section>
+</div>
 {% endblock %}
