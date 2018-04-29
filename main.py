@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, \
-    abort, send_from_directory, send_file
+    abort, send_from_directory, send_file, session
 from werkzeug.utils import secure_filename
 from collections import namedtuple
 from io import BytesIO
@@ -60,6 +60,15 @@ def _purge_expired_uploads():
                 shutil.rmtree(child)
 
 
+def _validate_code(code):
+    code = code.lower()
+
+    if all(c.isalpha() for c in code):
+        return code
+
+    raise ValueError('bad code!')
+
+
 @app.template_filter('formatseconds')
 def timestamp_filter(seconds):
     if seconds < 10:
@@ -113,7 +122,20 @@ def find():
 def filebin(code):
     _purge_expired_uploads()
 
-    code = code.lower()
+    try:
+        code = _validate_code(code)
+    except ValueError:
+        flash('Invalid code')
+        return redirect(url_for('index'))
+
+    # history items are two-item tuples like (code, expiration timestamp)
+    # history items expire after 10 minutes
+    history = [fbin for fbin in session.get(
+        'history', []) if fbin[1] - time.time() > 0]
+    if code not in (fbin[0] for fbin in history):
+        history.insert(0, (code, time.time() + (60 * 10)))
+    session['history'] = history
+
     path = os.path.join(app.config['UPLOAD_FOLDER'], code)
 
     if not os.path.exists(path):
@@ -151,7 +173,12 @@ def filebin(code):
 def uploaded_file(code, filename):
     _purge_expired_uploads()
 
-    code = code.lower()
+    try:
+        code = _validate_code(code)
+    except ValueError:
+        flash('Invalid code')
+        return redirect(url_for('index'))
+
     path = os.path.join(app.config['UPLOAD_FOLDER'], code)
 
     if not os.path.exists(path):
@@ -165,7 +192,12 @@ def uploaded_file(code, filename):
 def uploaded_archive(code):
     _purge_expired_uploads()
 
-    code = code.lower()
+    try:
+        code = _validate_code(code)
+    except ValueError:
+        flash('Invalid code')
+        return redirect(url_for('index'))
+
     path = os.path.join(app.config['UPLOAD_FOLDER'], code)
 
     if not os.path.exists(path):
