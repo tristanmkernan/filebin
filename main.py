@@ -1,12 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, \
-    abort, send_from_directory
+    abort, send_from_directory, send_file
 from werkzeug.utils import secure_filename
 from collections import namedtuple
+from io import BytesIO
 import os
 import shutil
 import pathlib
 import time
 import utils
+import zipfile
 
 UPLOAD_FOLDER = '/tmp/filebin/usercontent'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -27,22 +29,35 @@ Definition = namedtuple('Definition', ['word', 'meaning'])
 
 
 def _generate_code():
-    while True:
-        word1 = dictionary_db.random_word()
-        word2 = dictionary_db.random_word()
+    # create set of existing codes
+    upload_path = pathlib.Path(app.config['UPLOAD_FOLDER'])
 
-        code = '{}_{}'.format(word1, word2)
-        path = os.path.join(app.config['UPLOAD_FOLDER'], code)
+    exclude = set()
+    for child in upload_path.iterdir():
+        if child.is_dir():
+            full_path = child.resolve()
+            filename = os.path.basename(full_path)
+            exclude.add(filename)
 
-        if word1 != word2 and not os.path.exists(path):
-            os.makedirs(path)
-
-            return code
+    return dictionary_db.random_word(exclude)
 
 
-def _extract_definitions(code):
-    word1, word2 = code.split('_')
-    return Definition(word1, dictionary_db.define(word1)), Definition(word2, dictionary_db.define(word2))
+def _extract_definition(word):
+    return Definition(word, dictionary_db.define(word))
+
+
+def _purge_expired_uploads():
+    # remove old files
+    upload_path = pathlib.Path(app.config['UPLOAD_FOLDER'])
+
+    for child in upload_path.iterdir():
+        if child.is_dir():
+            stat = child.stat()
+            expiration = stat.st_mtime + (60 * 10)
+            remaining_seconds = expiration - time.time()
+
+            if remaining_seconds < 0:
+                shutil.rmtree(child)
 
 
 @app.template_filter('formatseconds')
@@ -59,8 +74,15 @@ def index():
                            max_size=utils.sizeof_fmt(app.config['MAX_CONTENT_LENGTH']))
 
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 @app.route('/new', methods=['POST'])
 def new():
+    _purge_expired_uploads()
+
     uploaded_files = request.files.getlist("files")
 
     if not uploaded_files:
@@ -71,23 +93,13 @@ def new():
         flash('Too many files!')
         return redirect(url_for('index'))
 
-    # remove old files
-    upload_path = pathlib.Path(app.config['UPLOAD_FOLDER'])
-
-    for child in upload_path.iterdir():
-        if child.is_dir():
-            stat = child.stat()
-            expiration = stat.st_mtime + (60 * 10)
-            remaining_seconds = expiration - time.time()
-
-            if remaining_seconds < 0:
-                shutil.rmtree(child)
-
     code = _generate_code()
+    directory = os.path.join(app.config['UPLOAD_FOLDER'], code)
+    os.makedirs(directory)
 
     for file in uploaded_files:
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], code, filename))
+        file.save(os.path.join(directory, filename))
 
     return redirect(url_for('filebin', code=code))
 
@@ -99,6 +111,8 @@ def find():
 
 @app.route('/bin/<code>')
 def filebin(code):
+    _purge_expired_uploads()
+
     code = code.lower()
     path = os.path.join(app.config['UPLOAD_FOLDER'], code)
 
@@ -111,11 +125,6 @@ def filebin(code):
     stat = p.stat()
     expiration = stat.st_mtime + (60 * 10)
     remaining_seconds = expiration - time.time()
-
-    if remaining_seconds < 0:
-        shutil.rmtree(path)
-        flash('Bin not found!')
-        return abort(404)
 
     files = []
     total_size = 0
@@ -133,13 +142,15 @@ def filebin(code):
     remaining = Remaining(int(remaining_seconds / 60),
                           int(remaining_seconds % 60))
     meta = BinMetadata(len(files), utils.sizeof_fmt(total_size), remaining)
-    definitions = _extract_definitions(code)
+    definition = _extract_definition(code)
 
-    return render_template('filebin.html', code=code, files=files, meta=meta, definitions=definitions)
+    return render_template('filebin.html', code=code, files=files, meta=meta, definition=definition)
 
 
 @app.route('/bin/<code>/<filename>')
 def uploaded_file(code, filename):
+    _purge_expired_uploads()
+
     code = code.lower()
     path = os.path.join(app.config['UPLOAD_FOLDER'], code)
 
@@ -147,18 +158,38 @@ def uploaded_file(code, filename):
         flash('Bin not found!')
         return abort(404)
 
-    p = pathlib.Path(path)
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], code), filename, as_attachment=True)
 
-    stat = p.stat()
-    expiration = stat.st_mtime + (60 * 10)
-    remaining_seconds = expiration - time.time()
 
-    if remaining_seconds < 0:
-        shutil.rmtree(path)
+@app.route('/archive/<code>')
+def uploaded_archive(code):
+    _purge_expired_uploads()
+
+    code = code.lower()
+    path = os.path.join(app.config['UPLOAD_FOLDER'], code)
+
+    if not os.path.exists(path):
         flash('Bin not found!')
         return abort(404)
 
-    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], code), filename, as_attachment=True)
+    # thanks to https://fadeit.dk/blog/2015/04/30/python3-flask-pil-in-memory-image/
+    # for the in-memory strategy
+
+    byte_io = BytesIO()
+
+    with zipfile.ZipFile(byte_io, 'w') as archive:
+        for child in pathlib.Path(path).iterdir():
+            if child.is_file():
+                full_path = child.resolve()
+                filename = os.path.basename(full_path)
+                archive.write(full_path, filename)
+
+    byte_io.seek(0)
+
+    return send_file(byte_io,
+                     mimetype='application/zip',
+                     as_attachment=True,
+                     attachment_filename='{}.zip'.format(code))
 
 
 @app.errorhandler(404)

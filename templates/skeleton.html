@@ -12,13 +12,18 @@
 
 	<link rel="manifest" href="/manifest.webmanifest">
 
-	<meta name="apple-mobile-web-app-title" content="FileBin">
+	<meta name="apple-mobile-web-app-title" content="File Pigeon">
 	<link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.png') }}">
 
 	<style>
-         .subtitle {
+         .my-1 {
              margin-top: 1rem;
+	     margin-bottom: 1rem;
          }
+
+	 .my-0-5 {
+	     margin: 0.5rem 0;
+	 }
 
          article.my-upload-error {
              max-width: 20rem;
@@ -27,83 +32,50 @@
 	</style>
     </head>
     <body>
-	<section class="hero is-medium">
-	    <div class="hero-head">
-		<nav class="navbar" role="navigation" aria-label="main navigation">
-		    <div class="container">
-			<div class="navbar-brand">
-			    <a class="navbar-item" href="/">
-				<img src="{{ url_for('static', filename='image/logo.png') }}" alt="logo" title="Made with GIMP"
-				     width="72" height="28">
-			    </a>
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+	    <div class="container">
+		<div class="navbar-brand">
+		    <a class="navbar-item" href="/">
+			<img src="{{ url_for('static', filename='image/logo.png') }}" alt="logo" title="Made with GIMP"
+			     width="72" height="28">
+		    </a>
 
-			    <a class="navbar-item open-enter-code-modal">
-				<span class="icon">
-				    <i class="fa fa-search"></i>
-				</span>
-				<span>Enter Code</span>
-			    </a>
-
-			    <div class="navbar-burger">
-				<span></span>
-				<span></span>
-				<span></span>
-			    </div>
-			</div>
-			<div class="navbar-menu">
-			    <div class="navbar-end">
-				<a class="navbar-item" href="/">
-				    <span class="icon">
-					<i class="fa fa-home"></i>
-				    </span>
-				    <span>Home</span>
-				</a>
-				<a class="navbar-item" href="https://github.com/russon77/filebin">
-				    <span class="icon">
-					<i class="fa fa-github"></i>
-				    </span>
-				    <span>Github</span>
-				</a>
-			    </div>
-			</div>
+		    <div class="navbar-burger">
+			<span></span>
+			<span></span>
+			<span></span>
 		    </div>
-		</nav>
+		</div>
+		<div class="navbar-menu">
+		    <div class="navbar-end">
+			<a class="navbar-item" href="{{ url_for('index') }}">
+			    <span class="icon">
+				<i class="fa fa-home"></i>
+			    </span>
+			    <span>Home</span>
+			</a>
+			<a class="navbar-item" href="{{ url_for('about') }}">
+			    <span class="icon">
+				<i class="fa fa-info"></i>
+			    </span>
+			    <span>About</span>
+			</a>
+			<a class="navbar-item" href="https://github.com/russon77/filebin">
+			    <span class="icon">
+				<i class="fa fa-github"></i>
+			    </span>
+			    <span>Github</span>
+			</a>
+		    </div>
+		</div>
 	    </div>
+	</nav>
 
-	    <div class="hero-body">
-		{% block main %}{% endblock %}
-	    </div>
-	</section>
+	{% block main %}{% endblock %}
 
-	<footer class="footer">
+	<footer class="footer" style="margin-top: 4rem;">
 	    <div class="container">
 		<div class="content has-text-centered">
-		    <p>
-			<strong>FileBin</strong> by <a href="https://mahasamatman.me">Tristan Kernan</a>. The source code is
-			licensed
-			<a href="https://www.gnu.org/licenses/gpl.html">GPL</a>. The website content
-			is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
-		    </p>
-		    <p>
-			Made with
-			<strong><a href="https://bulma.io/">Bulma</a></strong>
-			&bull;
-			<strong><a href="https://fontawesome.com/v4.7.0/">Font Awesome</a></strong>
-			&bull;
-			<strong><a href="https://jquery.com/">jQuery</a></strong>
-			&bull;
-			<strong><a href="http://flask.pocoo.org/">Flask</a></strong>
-			&bull;
-			<strong><a href="https://www.gimp.org/">GIMP</a></strong>
-		    </p>
-		    <p>
-			<strong><a href="https://www.nltk.org/">NLTK</a></strong>
-			&bull;
-			<strong><a href="https://wordnet.princeton.edu/">WordNet</a></strong>
-		    </p>
-		    <p class="is-size-7">
-			Pigeon icon made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
-		    </p>
 		    <p class="is-italic">
 			Please note: all uploaded files are public. Do not upload sensitive information!
 		    </p>
@@ -111,61 +83,15 @@
 	    </div>
 	</footer>
 
-	<div class="modal">
-	    <div class="modal-background"></div>
-	    <form class="modal-card" action="{{ url_for('find') }}">
-		<header class="modal-card-head">
-		    <p class="modal-card-title">Find Bin</p>
-		    <button class="delete" aria-label="close" type="button"></button>
-		</header>
-		<section class="modal-card-body">
-		    <div class="field">
-			<label class="label">Enter Code</label>
-			<div class="control">
-			    <input class="input" type="text" name="code" placeholder="voracious_gorilla" required data-focus="me">
-			</div>
-		    </div>
-		    <p class="help">
-			The code is the combination of the two randomly selected words, in order and with an underscore in between. For example <strong>gloomth_purposive</strong>.
-		    </p>
-		</section>
-		<footer class="modal-card-foot">
-		    <button class="button is-success" type="submit">
-			Find Bin
-		    </button>
-		</footer>
-	    </form>
-	</div>
-
 	<script src="{{ url_for('static', filename='js/jquery-3.3.1.slim.min.js') }}"></script>
 
 	<script>
 	 $(document).ready(function () {
-             $('.open-enter-code-modal')
-		 .click(function () {
-                     $('.modal').addClass('is-active');
-                     $('.modal input[data-focus]').focus();
-		 });
-
-             $('.modal button.delete')
-		 .click(function () {
-                     $('.modal').removeClass('is-active');
-		 });
-
              $('.navbar-burger')
 		 .click(function () {
                      $(this).toggleClass('is-active');
                      $('.navbar-menu').toggleClass('is-active');
 		 });
-
-	     $(document).on({
-		 keydown: function (e) {
-		     if (e.which === 27) {
-			 $('.modal').removeClass('is-active');
-			 e.preventDefault();
-		     }
-		 }
-	     });
 	 });
 	</script>
 

@@ -1,82 +1,84 @@
 {% extends "skeleton.html" %}
 
-{% block title %}FileBin{% endblock %}
+{% block title %}File Pigeon{% endblock %}
 
 {% block main %}
-<div class="columns">
-    <div class="column">
-        <article class="message is-danger is-hidden" id="files-deleted-message">
-            <div class="message-header">
-                <p>Files Deleted</p>
-            </div>
-            <div class="message-body">
-		This bin has been <strong>removed</strong>. Bins expire after <strong>10 minutes</strong>.
-            </div>
-        </article>
-        <nav class="panel">
-            <p class="panel-heading">
-                Bin <strong>{{ code }}</strong>
-            </p>
-            <div class="panel-block">
-                <p>
-                    {{ meta.num_files }} file(s) &bull;
-                    {{ meta.total_size }} &bull;
-                    <span id="countdown">{{ meta.remaining.minutes }}:{{ meta.remaining.seconds | formatseconds }} left</span>
-                </p>
-            </div>
-            {% for file in files %}
-            <a class="panel-block" href="{{ url_for('uploaded_file', code=code, filename=file.filename) }}">
-                <span class="panel-icon">
-                    <i class="fa fa-download"></i>
-                </span>
-                <span class="" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                    {{ file.filename }}
-                </span>
-                <span class="is-size-7" style="margin-left: auto;">
-                    {{ file.size }}
-                </span>
-            </a>
-            {% endfor %}
-        </nav>
-    </div>
-    <div class="column">
-        <article class="message is-info">
-            <div class="message-header">
-                <p>Instructions</p>
-            </div>
-            <div class="message-body">
-                Visit this site in another browser and enter the code <strong>{{ code }}</strong>. Alternatively,
-                copy <a href="{{ url_for('filebin', code=code) }}">this link</a> by right clicking and selecting
-                "copy link location." Then, share the link however you'd like!
-            </div>
-        </article>
-        <article class="message is-info">
-            <div class="message-header">
-                <p>Definitions</p>
-            </div>
-            <div class="message-body">
-                If you haven't already noticed, the codes used on this site are constructed from two random English
-                words. While you're here, check out the definitions!
-            </div>
-        </article>
-        {% for definition in definitions %}
-        <article class="message">
-            <div class="message-header">
-                <p>
-                    {{ definition.word|title }}
-                </p>
-                <a class="button is-small" href="https://en.wiktionary.org/wiki/{{ definition.word }}"
-                   title="Wiktionary">
-                    <span class="icon is-small">
-                        <i class="fa fa-wikipedia-w"></i>
+<div class="container my-1">
+    <div class="columns">
+	<div class="column">
+            <article class="message is-danger is-hidden" id="files-deleted-message">
+		<div class="message-header">
+                    <p>Files Deleted</p>
+		</div>
+		<div class="message-body">
+		    This bin has been <strong>removed</strong>. Bins expire after <strong>10 minutes</strong>.
+		</div>
+            </article>
+            <nav class="panel">
+		<p class="panel-heading">
+		    <span>Bin <strong>{{ code }}</strong></span>
+		</p>
+		<div class="panel-block">
+                    <p>
+			{{ meta.num_files }} file(s) &bull;
+			{{ meta.total_size }} &bull;
+			<span id="countdown">{{ meta.remaining.minutes }}:{{ meta.remaining.seconds | formatseconds }} left</span>
+                    </p>
+		</div>
+		{% for file in files %}
+		<a class="panel-block" href="{{ url_for('uploaded_file', code=code, filename=file.filename) }}">
+                    <span class="panel-icon">
+			<i class="fa fa-download"></i>
                     </span>
-                </a>
-            </div>
-            <div class="message-body">
-                {{ definition.meaning }}
-            </div>
-        </article>
-        {% endfor %}
+                    <span class="" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+			{{ file.filename }}
+                    </span>
+                    <span class="is-size-7" style="margin-left: auto;">
+			{{ file.size }}
+                    </span>
+		</a>
+		{% endfor %}
+		<a class="panel-block" href="{{ url_for('uploaded_archive', code=code) }}">
+                    <span class="panel-icon">
+			<i class="fa fa-archive"></i>
+                    </span>
+                    <span class="" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+			zip archive
+                    </span>
+		    <span class="is-size-7" style="margin-left: auto;">
+			~{{ meta.total_size }}
+                    </span>
+		</a>	    
+            </nav>
+	</div>
+	<div class="column">
+            <article class="message is-info">
+		<div class="message-header">
+                    <p>Instructions</p>
+		</div>
+		<div class="message-body">
+                    Visit this site in another browser and enter the code <strong>{{ code }}</strong>. Alternatively,
+                    copy <a href="{{ url_for('filebin', code=code) }}">this link</a> by right clicking and selecting
+                    "copy link location." Then, share the link however you'd like!
+		</div>
+            </article>
+            <article class="message">
+		<div class="message-header">
+                    <p>
+			Definition for <em>{{ definition.word|title }}</em>
+                    </p>
+                    <a class="button is-small" href="https://en.wiktionary.org/wiki/{{ definition.word }}"
+                       title="Wiktionary">
+			<span class="icon is-small">
+                            <i class="fa fa-wikipedia-w"></i>
+			</span>
+                    </a>
+		</div>
+		<div class="message-body">
+                    {{ definition.meaning }}
+		</div>
+            </article>
+	</div>
     </div>
 </div>
 {% endblock %}

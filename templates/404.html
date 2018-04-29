@@ -3,18 +3,24 @@
 {% block title %}Page Not Found{% endblock %}
 
 {% block main %}
-<div class="container">
-    <h1 class="title">404 Page Not Found</h1>
-    <h2 class="subtitle">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    {{ message }}
+<section class="hero">
+    <div class="hero-body">
+	<div class="container">
+	    <h1 class="title">
+		404 Page Not Found
+	    </h1>
+	    <h2 class="subtitle">
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		{% for message in messages %}
+                {{ message }}
                 {% endfor %}
-            {% else %}
+		{% else %}
                 What you were looking for is just not there.
-            {% endif %}
-        {% endwith %}
-    </h2>
-</div>
+		{% endif %}
+		{% endwith %}
+	    </h2>
+	</div>
+    </div>
+</section>
 {% endblock %}
