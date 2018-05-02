@@ -1,0 +1,1 @@
+from .dictionarydatabase import Dictionary

@@ -16,37 +16,37 @@
             </article>
             <nav class="panel">
 		<p class="panel-heading">
-		    <span>Bin <strong>{{ code }}</strong></span>
+		    <span>Bin <strong>{{ meta.code }}</strong></span>
 		</p>
 		<div class="panel-block">
                     <p>
-			{{ meta.num_files }} file(s) &bull;
-			{{ meta.total_size }} &bull;
-			<span id="countdown">{{ meta.remaining.minutes }}:{{ meta.remaining.seconds | formatseconds }} left</span>
+			{{ files | length }} file(s) &bull;
+			{{ meta.total_size | formatsize }} &bull;
+			<span id="countdown">... left</span>
                     </p>
 		</div>
 		{% for file in files %}
-		<a class="panel-block" href="{{ url_for('uploaded_file', code=code, filename=file.filename) }}">
+		<a class="panel-block" href="{{ url_for('uploaded_file', code=meta.code, filename=file.name) }}">
                     <span class="panel-icon">
 			<i class="fa fa-download"></i>
                     </span>
                     <span class="" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-			{{ file.filename }}
+			{{ file.name }}
                     </span>
                     <span class="is-size-7" style="margin-left: auto;">
-			{{ file.size }}
+			{{ file.size | formatsize }}
                     </span>
 		</a>
 		{% endfor %}
-		<a class="panel-block" href="{{ url_for('uploaded_archive', code=code) }}">
+		<a class="panel-block" href="{{ url_for('uploaded_archive', code=meta.code) }}">
                     <span class="panel-icon">
 			<i class="fa fa-archive"></i>
                     </span>
-                    <span class="" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                    <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 			zip archive
                     </span>
 		    <span class="is-size-7" style="margin-left: auto;">
-			~{{ meta.total_size }}
+			~{{ meta.total_size | formatsize }}
                     </span>
 		</a>	    
             </nav>
@@ -57,17 +57,17 @@
                     <p>Instructions</p>
 		</div>
 		<div class="message-body">
-                    Download individual files or a zip archive here. To share, visit this site in another browser and enter the code <strong>{{ code }}</strong>. Alternatively,
-                    copy <a href="{{ url_for('filebin', code=code) }}">this link</a> by right clicking and selecting
+                    Download individual files or a zip archive here. To share, visit this site in another browser and enter the code <strong>{{ meta.code }}</strong>. Alternatively,
+                    copy <a href="{{ url_for('filebin', code=meta.code) }}">this link</a> by right clicking and selecting
                     "copy link location."
 		</div>
             </article>
             <article class="message">
 		<div class="message-header">
                     <p>
-			Definition for <em>{{ definition.word|title }}</em>
+			Definition for <em>{{ meta.code | title }}</em>
                     </p>
-                    <a class="button is-small" href="https://en.wiktionary.org/wiki/{{ definition.word }}"
+                    <a class="button is-small" href="https://en.wiktionary.org/wiki/{{ meta.code }}"
                        title="Wiktionary">
 			<span class="icon is-small">
                             <i class="fa fa-wikipedia-w"></i>
@@ -75,7 +75,7 @@
                     </a>
 		</div>
 		<div class="message-body">
-                    {{ definition.meaning }}
+                    {{ meta.definition }}
 		</div>
             </article>
 	</div>
@@ -86,7 +86,7 @@
 {% block extrascripts %}
 <script>
  // expiration in ms
- var expiration = Date.now() + Math.floor((({{ meta.remaining.minutes }} * 60) + {{ meta.remaining.seconds }}) * 1000);
+ var expiration = {{ meta.expiration_timestamp_utc }} * 1000;
 
  var intervalID = setInterval(update_time_remaining, 500);
 
