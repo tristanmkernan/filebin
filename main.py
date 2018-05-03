@@ -114,7 +114,7 @@ def filebin(code):
         files, meta = _filebin(code)
 
         # manage session for browser-based visitors
-        history.add(code)
+        history.add(meta.code)
 
         return render_template('filebin.html',
                                files=files,
