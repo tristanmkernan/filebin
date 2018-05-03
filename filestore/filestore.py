@@ -56,6 +56,22 @@ def purge_expired(func):
     return _purge_expired
 
 
+def validate_code(func):
+    """
+    decorator to validate the code before function is run
+    """
+
+    def _validate_code(self, code, *args, **kwargs):
+        code = code.lower()
+
+        if all(c.isalpha() for c in code):
+            return func(self, code, *args, **kwargs)
+
+        raise FileStoreInvalidCodeException()
+
+    return _validate_code
+
+
 class FileStore(object):
 
     def __init__(self, app):
@@ -75,19 +91,12 @@ class FileStore(object):
 
         raise FileStoreInvalidCodeException()
 
-    def validate_code(self, code):
-        code = code.lower()
-
-        if all(c.isalpha() for c in code):
-            return code
-
-        raise FileStoreInvalidCodeException()
-
     @purge_expired
     def add(self, files):
         """
         saves input files and returns their access code
         """
+
         code = self.generate_code()
         directory = os.path.join(self.upload_path, code)
 
@@ -100,11 +109,11 @@ class FileStore(object):
         return code
 
     @purge_expired
+    @validate_code
     def access(self, code):
         """
         return a bin object if code maps to files on disk
         """
-        code = self.validate_code(code)
 
         path = os.path.join(self.upload_path, code)
 
@@ -137,11 +146,12 @@ class FileStore(object):
         return FileBin(files, meta)
 
     @purge_expired
+    @validate_code
     def access_file(self, code, filename):
         """
         return the file directory path if available
         """
-        code = self.validate_code(code)
+
         path = os.path.join(self.upload_path, code)
 
         if not os.path.exists(path):
@@ -150,11 +160,11 @@ class FileStore(object):
         return path
 
     @purge_expired
+    @validate_code
     def access_archive(self, code):
         """
         return a byte_io object containing the zip file
         """
-        code = self.validate_code(code)
 
         path = os.path.join(self.upload_path, code)
 
