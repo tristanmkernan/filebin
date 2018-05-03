@@ -60,6 +60,10 @@ class FileStore(object):
 
     def __init__(self, app):
         self.upload_path = app.config['UPLOAD_FOLDER']
+
+        if not os.path.exists(self.upload_path):
+            os.makedirs(self.upload_path)
+
         self.expiration_time_seconds = app.config['FILESTORE_EXPIRATION_TIME_SECONDS']
         self.dictionary = Dictionary()
 
