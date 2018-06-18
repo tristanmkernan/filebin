@@ -17,6 +17,12 @@ $ make stop # stop daemon
 
 Then point your browser at http://localhost:$some_local_port.
 
+### Upload Limits
+
+While the application may support large (>2MB) uploads, if you use an underlying server, like nginx, you may need to configure an increase for upload limits.
+
+Please see this helpful link for documentation on changing upload limits for popular servers, including nginx and apache. [View it here](https://www.bookstackapp.com/docs/admin/upload-limits/).
+
 ## Motivation
 
 - To make it easier to send files between phone and desktop - why do I still use e-mail for this?
