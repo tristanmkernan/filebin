@@ -4,6 +4,8 @@ lib/
 lib64
 pip-selfcheck.json
 
+share/
+
 .idea/
 
 # Byte-compiled / optimized / DLL files

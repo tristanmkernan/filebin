@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = 'i should probably change this'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_FILES_PER_UPLOAD'] = 10
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024
 app.config['FILESTORE_EXPIRATION_TIME_SECONDS'] = 10 * 60  # ten minutes
 
 filestore = FileStore(app)

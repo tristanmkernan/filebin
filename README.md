@@ -9,13 +9,13 @@
 ## Setup
 
 ```
-$ make # short for make build
-$ make irun # run in interactive mode
-$ make drun # run as daemon
-$ make stop # stop daemon
+$ docker-compose up # run with logs in console
+$ docker-compose up --detach # run in background
+$ docker-compose stop # stop running container
+$ docker-compose down # stop and remove running container
 ```
 
-Then point your browser at http://localhost:$some_local_port.
+Then point your browser at http://localhost:8081.
 
 ### Upload Limits
 
